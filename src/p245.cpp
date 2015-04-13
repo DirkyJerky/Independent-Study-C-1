@@ -1,14 +1,16 @@
 #include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
 #define MAX_BUF 512
+#define CATF "CATALOG.txt"
 
 using namespace std;
 
 FILE *catalog_f;
 
-char **name;
-char **author;
-char **publisher;
+char name[MAX_BUF][MAX_BUF];
+char author[MAX_BUF][MAX_BUF];
+char publisher[MAX_BUF][MAX_BUF];
 int numBooks = 0;
 
 void consumeLine() {
@@ -17,12 +19,14 @@ void consumeLine() {
 
 
 int menu() {
+    printf("\n");
     printf("Card Catalog:\n");
     printf("\n");
     printf("1: Enter\n");
     printf("2: Search by Author\n");
     printf("3: Search by Title\n");
     printf("4: Quit\n");
+    printf("5: Save to Disk");
     printf("\n");
     printf(":");
 
@@ -30,22 +34,40 @@ int menu() {
     scanf("%d", &code);
 
     consumeLine();
-    if (!(1 <= code && code <= 4)) {
+    printf("\n");
+    if (!(1 <= code && code <= 5)) {
         return 0;
     }
     return code;
 }
 
 int writeCatFile() {
+    if ((catalog_f = fopen(CATF, "w")) == NULL) {
+        return 1;
+    }
     for(int i = 0; i < numBooks; i++) {
-        fputs(name[i], catalog_f); fputc('\n', catalog_f); 
-        fputs(author[i], catalog_f); fputc('\n', catalog_f); 
-        fputs(publisher[i], catalog_f); fputc('\n', catalog_f); 
+        fputs(name[i], catalog_f); // fputc('\n', catalog_f); 
+        fputs(author[i], catalog_f); // fputc('\n', catalog_f); 
+        fputs(publisher[i], catalog_f); // fputc('\n', catalog_f); 
         fputc('\n', catalog_f);
     }
+
+    fclose(catalog_f);
+
+    return 0;
 }
 
 int readCatFile() {
+    if(access(CATF, F_OK) != 0) {
+        printf("Unable to access Catalog file.\n");
+        return 1;
+    } else {
+        if ((catalog_f = fopen(CATF, "r")) == NULL) {
+            return 1;
+        }
+    } 
+
+
     int lines = 0;
     // Count lines
     while (EOF != (fscanf(catalog_f, "%*[^\n]"), fscanf(catalog_f, "%*c"))) {
@@ -55,6 +77,7 @@ int readCatFile() {
     rewind(catalog_f);
 
     if(lines % 4) {
+        printf("Malformed Catalog file? (%d lines)", lines);
         return 1;
     }
 
@@ -66,6 +89,12 @@ int readCatFile() {
         fscanf(catalog_f, "%*c"); // Swallow the empty line
     }
     numBooks = books;
+    
+    printf("Read %d books into memory.\n", numBooks);
+
+    fclose(catalog_f);
+
+    return 0;
 }
 
 void mEnter() {
@@ -78,7 +107,7 @@ void mEnter() {
         fgets(name[numBooks], MAX_BUF, stdin);
 
         // If name is blank ("\n\0")
-        if(!(name[1])) {
+        if(!(name[numBooks][1])) {
             break;
         }
 
@@ -94,25 +123,7 @@ void mEnter() {
     }
 }
 
-int main(int argc, char *argv[]) {
-    if((name = (char**) malloc(MAX_BUF * MAX_BUF * sizeof(char))) == NULL) {
-        printf("Unable to allocate memory for 'name[][]'\n");
-    } else if((author = (char**) malloc(MAX_BUF * MAX_BUF * sizeof(char))) == NULL) {
-        printf("Unable to allocate memory for 'author[][]'\n");
-    } else if((publisher = (char**) malloc(MAX_BUF * MAX_BUF * sizeof(char))) == NULL) {
-        printf("Unable to allocate memory for 'publisher[][]'\n");
-    } else {
-        printf("Allocation rules!\n");
-    }
-
-    if((catalog_f = fopen("CATALOG.txt", "rw")) == NULL) {
-        printf("Unable to open CATALOG.txt file");
-    } else { printf("Read file"); }
-
-    if(!readCatFile()) {
-        printf("Unable to read catalog file into memory!\n");
-    }
-
+void menuLogic() {
     while(true) {
         int opt = menu();
         switch(opt) {
@@ -133,11 +144,10 @@ int main(int argc, char *argv[]) {
                 break;
 
             case 4:
-                exit(0);
-                break;
+                return;
 
             case 5:
-                if(writeCatFile()) {
+                if(writeCatFile() == 0) {
                     printf("Wrote to Catalog file.\n");
                 } else {
                     printf("Failed to write to Catalog file!\n");
@@ -145,5 +155,27 @@ int main(int argc, char *argv[]) {
 
                 break;
         }
+    }
+}
+
+int main(int argc, char *argv[]) {
+//    if((name = (char**) malloc(MAX_BUF * MAX_BUF * sizeof(char))) == NULL) {
+//        printf("Unable to allocate memory for 'name[][]'\n");
+//    } else if((author = (char**) malloc(MAX_BUF * MAX_BUF * sizeof(char))) == NULL) {
+//        printf("Unable to allocate memory for 'author[][]'\n");
+//    } else if((publisher = (char**) malloc(MAX_BUF * MAX_BUF * sizeof(char))) == NULL) {
+//        printf("Unable to allocate memory for 'publisher[][]'\n");
+//    } else {
+//        printf("Allocation rules!\n");
+//    }
+
+    if(readCatFile() != 0) {
+        printf("Unable to read catalog file into memory!\n");
+    }
+
+    menuLogic();
+
+    if (catalog_f != NULL) {
+        fclose(catalog_f);
     }
 }
