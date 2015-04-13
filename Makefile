@@ -1,10 +1,10 @@
-CC := g++ 
+CC := gcc
 SRCDIR := src
 BINDIR := bin
  
-SRCEXT := cpp
+SRCEXT := c
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
-OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.exe))
+TARGETS := $(patsubst $(SRCDIR)/%,$(BINDIR)/%,$(SOURCES:.$(SRCEXT)=.exe))
 CFLAGS := -g # -Wall
 
 $(BINDIR)/%.exe: $(SRCDIR)/%.$(SRCEXT)
@@ -15,5 +15,7 @@ clean:
 	echo " Cleaning..."; 
 	$(RM) -r $(BINDIR)
 
+all: $(TARGETS)
+	@true
 
-.PHONY: clean
+.PHONY: clean all

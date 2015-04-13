@@ -1,8 +1,7 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #define MAX_BUF 512
-
-using namespace std;
 
 #define MAX 12
 #define COUNTBY 3

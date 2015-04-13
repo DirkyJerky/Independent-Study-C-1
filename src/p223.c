@@ -1,9 +1,8 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #define MAX_BUF 512
-
-using namespace std;
 
 #define ALPHABET 26
 

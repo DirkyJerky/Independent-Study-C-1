@@ -1,9 +1,7 @@
+#include <stdbool.h>
 #include <stdio.h>
-#include <iostream>
 #include <stdlib.h>
 #define MAX_BUF 512
-
-using namespace std;
 
 int main() {
     char *string;
@@ -15,7 +13,7 @@ int main() {
         if(!foundspace && *string == ' ') {
            foundspace = true; 
         } else if (foundspace) {
-            cout << *string;
+            printf("%c", *string);
         } 
         string++;
     }

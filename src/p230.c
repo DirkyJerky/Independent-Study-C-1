@@ -1,9 +1,8 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #define MAX_BUF 512
-
-using namespace std;
 
 int main(int argc, char *argv[]) {
     if(argc != 3) {

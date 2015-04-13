@@ -1,10 +1,9 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 #define MAX_BUF 512
 #define CATF "CATALOG.txt"
-
-using namespace std;
 
 FILE *catalog_f;
 

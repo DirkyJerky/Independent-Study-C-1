@@ -1,10 +1,8 @@
+#include <stdbool.h>
 #include <stdio.h>
-#include <iostream>
 #include <stdlib.h>
 #include <string.h>
 #define MAX_BUF 512
-
-using namespace std;
 
 int mystrlen(char *s) {
     int len = 0;
