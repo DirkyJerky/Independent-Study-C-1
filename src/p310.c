@@ -9,5 +9,7 @@
 #define demo(X) demo_int(X)
 
 int main(int argc, char *argv[]) {
-   
+    for(int i = 0, j = -50, k = i + j; i <= 100; i++, j++, k = i + j) {
+        printf("%d\n", k);
+    }   
 }

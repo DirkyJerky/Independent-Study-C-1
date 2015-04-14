@@ -9,5 +9,10 @@
 #define demo(X) demo_int(X)
 
 int main(int argc, char *argv[]) {
-   
+    register int total = 0;
+    for(int i = 0; i <= 100; i++) {
+        total += i;
+    }
+
+    printf("Sum: %d\n", total);
 }

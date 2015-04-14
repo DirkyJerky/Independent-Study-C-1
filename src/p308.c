@@ -9,5 +9,7 @@
 #define demo(X) demo_int(X)
 
 int main(int argc, char *argv[]) {
-   
+    for(int i = 34; i < 1000; i += (17 * 2)) {
+        printf("%d\n", i);
+    }   
 }

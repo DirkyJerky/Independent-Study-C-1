@@ -9,5 +9,8 @@
 #define demo(X) demo_int(X)
 
 int main(int argc, char *argv[]) {
-   
+    demo((80 >> 1))   
+    demo((80 / 2))   
+    demo((80 << 1))   
+    demo((80 * 2))   
 }
